@@ -3,3 +3,13 @@
 body {
   padding-top: 60px;
 }
+
+.btn-xlarge {
+    padding: 25px 25px;
+    font-size: 46px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+    margin-top:10.5px;
+}
