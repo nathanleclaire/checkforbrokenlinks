@@ -9,11 +9,13 @@
         	<input ng-model="url_to_test" type="text" name="url-to-check" id="url-to-check" class="form-control" placeholder="Enter URL To Check For Broken Links">
         </div>
         <div class="row">
-        	<div class="col-md-offset-5">
-        		<button ng-click="startRunningTest()" ng-show="runningTest" class="btn btn-primary btn-xlarge">GO!</a>
+        	<div class="span6 btn-center">
+        		<button ng-click="startRunningTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge">GO!</button>
      		</div>
      	</div>
-     	<div test-url>
+
+     	<div test-url ng-show="done_parsing_urls" ng-repeat="test_url in parsed_urls">
+
      	</div>
 
  </div>

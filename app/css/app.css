@@ -13,3 +13,7 @@ body {
             border-radius: 8px;
     margin-top:10.5px;
 }
+
+.btn-center {
+	text-align: center;
+}
