@@ -14,6 +14,14 @@
      		</div>
      	</div>
 
+      <!----- 
+        Evenetually this element should actually be something like
+        
+        <test-url url="{{url_to_test}}" ng-repeat="url_to_test in parsed_urls"></test-url>
+        
+        This will allow us to have isolate scope in the directive (so url_to_test can be unique per directive).
+      ---->
+      
      	<div test-url ng-show="done_parsing_urls" ng-repeat="test_url in parsed_urls">
 
      	</div>
