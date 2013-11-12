@@ -1,1 +1,19 @@
-<p>This is the partial for view 1.</p>
+  <div class="hero-unit">
+        <div class="row">
+        	<h1><i class="fa fa-chain-broken"></i> Check for broken links on a webpage.</h1>
+        </div>
+        <div class="row">
+        	<p>It's easy and fun to watch the results show up in realtime.  Just enter the URL in question below, and click the big button.</p>
+        </div>
+        <div class="row">
+        	<input ng-model="url_to_test" type="text" name="url-to-check" id="url-to-check" class="form-control" placeholder="Enter URL To Check For Broken Links">
+        </div>
+        <div class="row">
+        	<div class="col-md-offset-5">
+        		<button ng-click="startRunningTest()" ng-show="runningTest" class="btn btn-primary btn-xlarge">GO!</a>
+     		</div>
+     	</div>
+     	<div test-url>
+     	</div>
+
+ </div>
