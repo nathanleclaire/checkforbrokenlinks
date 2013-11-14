@@ -6,7 +6,7 @@
         	<p>It's easy and fun to watch the results show up in realtime.  Just enter the URL in question below, and click the big button.</p>
         </div>
         <div class="row">
-        	<input ng-model="url_to_test" type="text" name="url-to-check" id="url-to-check" class="form-control" placeholder="Enter URL To Check For Broken Links">
+        	<input ng-model="url_to_scrape" type="text" name="url_to_scrape" id="url-to-scrape" class="form-control" placeholder="Enter URL To Check For Broken Links">
         </div>
         <div class="row">
         	<div class="span6 btn-center">
@@ -14,16 +14,7 @@
      		</div>
      	</div>
 
-      <!----- 
-        Evenetually this element should actually be something like
+        <making-call-spinner ng-show="runningTest && !done_parsing_urls"></making-call-spinner>
+     	<test-url-status ng-show="done_parsing_urls" ng-repeat="test_url in retrieved_urls"></test-url-status>
         
-        <test-url url="{{url_to_test}}" ng-repeat="url_to_test in parsed_urls"></test-url>
-        
-        This will allow us to have isolate scope in the directive (so url_to_test can be unique per directive).
-      ---->
-      
-     	<div test-url ng-show="done_parsing_urls" ng-repeat="test_url in parsed_urls">
-
-     	</div>
-
  </div>

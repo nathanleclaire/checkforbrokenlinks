@@ -3,9 +3,12 @@
 /* Controllers */
 
 angular.module('myApp.controllers', []).
-  controller('MainCtrl', function($scope) {
-  	$scope.runningTest = true;
+  controller('MainCtrl', function($scope, $http) {
+  	$http.defaults.useXDomain = true;
+  	$scope.runningTest = false;
+  	$scope.done_parsing_urls = false;
   	$scope.startRunningTest = function() {
-  		$scope.runningTest = false;
+  		$scope.runningTest = true;
+  		console.log($scope.url_to_parse);
   	};
   });
