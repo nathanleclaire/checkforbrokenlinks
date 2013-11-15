@@ -7,7 +7,7 @@ import (
 )
 
 func slurpHandler(w http.ResponseWriter, r *http.Request) {
-	url_to_scrape := r.URL.Query()["url_to_scrape"][0]
+	url_to_scrape := r.URL.Query().Get("url_to_scrape")
 	log.Print("query raw", url_to_scrape)
 
 	urlToParseResponse, err := http.Get(url_to_scrape);
