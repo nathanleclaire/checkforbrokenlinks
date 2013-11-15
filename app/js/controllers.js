@@ -4,7 +4,6 @@
 
 angular.module('myApp.controllers', []).
   controller('MainCtrl', function($scope, $http) {
-  	$http.defaults.useXDomain = true;
   	$scope.runningTest = false;
   	$scope.done_scraping_original_url = false;
   	$scope.startRunningTest = function() {
