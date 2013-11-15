@@ -23,6 +23,10 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// To Implement:  Slurp Handler or another handler should use h5 to 
+//                grab all href attributes from <a> tags in the DOM slurped
+//                (pass it as a string[] in a struct, marshalled to JSON)
+
 func main() {
 	http.HandleFunc("/slurp", slurpHandler);
 	http.Handle("/", http.FileServer(http.Dir("..")))
