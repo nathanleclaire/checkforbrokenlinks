@@ -16,8 +16,12 @@ controller('MainCtrl', function($scope, $http) {
         })
             .success(function(data) {
                 console.log(data);
+                $scope.runningTest = false;
                 $scope.done_scraping_original_url = true;
                 $scope.externalWebSiteJSON = angular.toJson(data, true);
+                if (data.success) {
+                    $scope.retrieved_urls = data.links;
+                }
             });
     };
 });
