@@ -1,0 +1,10 @@
+- Trigger call/process when user types Enter in url box
+- Add validation to URLs and/or allow for appending of "http://" on front
+- Directive for "ticking" dots when querying about URL status
+- Create "About" and "Feedback" pages
+- Move over to using async index.html page??
+- Decide whether or not to serve static files using Go depending on environment variable (or command line arg) - use nginx in production
+- Move over to proper directive solution instead of list hack
+- Figure out why sometimes the app just bricks and won't call anything
+- possibly switch ng-repeat over to using a table
+- "PWM" animation while calling out to external server
