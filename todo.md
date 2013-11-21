@@ -7,5 +7,5 @@
 - Move over to proper directive solution instead of list hack
     - On this note, see this video : https://egghead.io/lessons/angularjs-directive-to-directive-communication.  The subsection of the `MainCtrl` that makes the `$http` request should actually be its own controller on a directive with isolate scope.  There should be two directives, one to pass in the url to test as an attribute and run the actual call, and another to just display the HTML results/processing status (which is a `restrict: 'E'` directive).  The repeated directives' isolated scope controllers should listen for an event indicating that the original call to parse links has returned (and thus the list of URLs to check has been populated)- the MainCtrl will broadcast this event.
 - Figure out why sometimes the app just bricks and won't call anything
-- possibly switch ng-repeat over to using a table
+- possibly switch `ng-repeat` over to using a table
 - "PWM" animation while calling out to external server
