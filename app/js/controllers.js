@@ -8,7 +8,6 @@ controller('MainCtrl', function($scope, $http) {
     $scope.done_scraping_original_url = false;
     $scope.startRunningTest = function() {
         $scope.runningTest = true;
-        console.log($scope.url_to_scrape);
         $http.get('/slurp', {
             params: {
                 url_to_scrape: $scope.url_to_scrape
@@ -24,4 +23,15 @@ controller('MainCtrl', function($scope, $http) {
                 }
             });
     };
+    $scope.checkUrl = function(url_to_check) {
+        console.log("checking ", url_to_check);
+        $http.get('/check', {
+            params: {
+                url_to_check: url_to_check
+            }
+        })
+            .success(function(data) {
+                $scope.checkResult = data;
+            })
+    }
 });
