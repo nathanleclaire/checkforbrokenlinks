@@ -57,12 +57,32 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func checkHandler(w http.ResponseWriter, r *http.Request) {
+	url_to_check := r.URL.Query().Get("url_to_check")
+	externalServerResponse, err := http.Get(url_to_check)
+	if err != nil {
+		log.Print("error getting in checkHandler ", url_to_check)
+	}
+
+	response := map[string]interface{}{
+		"status":     externalServerResponse.Status,
+		"statusCode": externalServerResponse.StatusCode,
+	}
+
+	responseJSON, err := json.Marshal(response)
+	if err != nil {
+		log.Print("error Marshalling check response json: ", err)
+	}
+	w.Write(responseJSON)
+}
+
 // To Implement:  Slurp Handler or another handler should use h5 to 
 //                grab all href attributes from <a> tags in the DOM slurped
 //                (pass it as a string[] in a struct, marshalled to JSON)
 
 func main() {
 	http.HandleFunc("/slurp", slurpHandler)
+	http.HandleFunc("/check", checkHandler)
 	http.Handle("/", http.FileServer(http.Dir("..")))
 	http.Handle("/css/", http.FileServer(http.Dir("..")))
 	http.Handle("/img/", http.FileServer(http.Dir("..")))
