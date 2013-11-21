@@ -1,37 +1,49 @@
 <!doctype html>
 <html lang="en" ng-app="myApp">
+
 <head>
-  <meta charset="utf-8">
-  <title>Check For Broken Links On A Webpage</title>
-  <link rel="stylesheet" href="css/app.css"/>
-  <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"/>
+    <meta charset="utf-8">
+    <title>Check For Broken Links On A Webpage</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css" />
 </head>
+
 <body>
 
 
-  <div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-brand"><a href="#"><i class="fa fa-chain-broken"></i> Check For Broken Links</a></div>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#/about">About</a></li>
-      </ul>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand"><a href="#"><i class="fa fa-chain-broken"></i> Check For Broken Links</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#/about"><i class="fa fa-question"></i> About</a>
+                </li>
+                <li>
+                    <a href="#/about"><i class="fa fa-envelope"></i> Feedback</a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://github.com/nathanleclaire/checkforbrokenlinks/fork"><i class="fa fa-github-alt"></i> Fork On Github</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 
-<div class="container">
-  <div ng-view>
-  </div>
-</div>
+    <div class="container">
+        <div ng-view>
+        </div>
+    </div>
 
-  <!-- In production use:
+    <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
-  <script src="lib/angular/angular.js"></script>
-  <script src="lib/angular/angular-route.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-route.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/directives.js"></script>
 </body>
+
 </html>
