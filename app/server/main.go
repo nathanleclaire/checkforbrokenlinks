@@ -13,44 +13,53 @@ type ParsedResponse struct {
 	Links   []string `json:"links"`
 }
 
+func getFailedSlurpResponse() []byte {
+	failResponse := &ParsedResponse{false, nil}
+	failResponseJSON, err := json.Marshal(failResponse)
+	if err != nil {
+		log.Print("something went really weird in attempt to marshal a fail json ", err)
+		failResponseJSON, _ = json.Marshal(nil)
+	}
+	return failResponseJSON
+}
+
 func slurpHandler(w http.ResponseWriter, r *http.Request) {
 	url_to_scrape := r.URL.Query().Get("url_to_scrape")
-	log.Print("query raw", url_to_scrape)
 
 	var doc *goquery.Document
 	var e error
+	var parsedResponseJSON []byte
 
 	links := []string{}
 
 	if doc, e = goquery.NewDocument(url_to_scrape); e != nil {
 		log.Print("error querying for document: ", url_to_scrape, "err : ", e)
-	}
-
-	crossDomainRegex, err := regexp.Compile(`^http`)
-	if err != nil {
-		log.Printf("issue compiling regular expression to validate cross domain URLs")
-	}
-
-	doc.Find("a").Each(func(i int, s *goquery.Selection) {
-		href, exists := s.Attr("href")
-		if exists != true {
-			log.Print("href does not exist for: ", s)
-		} else {
-			if crossDomainRegex.Match([]byte(href)) {
-				links = append(links, href)
-			}
-		}
-	})
-
-	parsedResponse := &ParsedResponse{true, links}
-	parsedResponseJSON, err := json.Marshal(parsedResponse)
-
-	if err != nil {
-		parsedResponse := &ParsedResponse{false, nil}
-		parsedResponseJSON, err := json.Marshal(parsedResponse)
+		parsedResponseJSON = getFailedSlurpResponse()
+	} else {
+		crossDomainRegex, err := regexp.Compile(`^http`)
 		if err != nil {
-			log.Print("something went really weird in attempt to marshal a fail json ", err, parsedResponseJSON)
+			log.Printf("issue compiling regular expression to validate cross domain URLs")
 		}
+
+		doc.Find("a").Each(func(i int, s *goquery.Selection) {
+			href, exists := s.Attr("href")
+			if exists != true {
+				log.Print("href does not exist for: ", s)
+			} else {
+				// TODO:  Implement handling of same domain links
+				if crossDomainRegex.Match([]byte(href)) {
+					links = append(links, href)
+				}
+			}
+		})
+
+		parsedResponse := &ParsedResponse{true, links}
+		parsedResponseJSON, err = json.Marshal(parsedResponse)
+
+		if err != nil {
+			parsedResponseJSON = getFailedSlurpResponse()
+		}
+
 	}
 
 	w.Write(parsedResponseJSON)

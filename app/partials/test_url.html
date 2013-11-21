@@ -1,6 +1,19 @@
-<div class="row" ng-click="checkUrl(test_url)">
-    <i class="fa fa-spinner fa-spin"></i> Checking <a href="{{ test_url }}">{{ test_url }}</a> ...
-</div>
-<div class="row" ng-show="checkResult">
-    <pre>{{ checkResult }}</pre>
+<div class="row">
+    <span ng-switch="statusCodeResult(link.checkResult.statusCode)">
+        <span ng-switch-when="false">
+            <i class="fa fa-times error"></i> 
+            <span class="error">Broken:</span>
+        </span>
+        <span ng-switch-when="true">
+            <i class="fa fa-check success"></i> Healthy:
+        </span>
+        <span ng-switch-default>
+            <i class="fa fa-spinner fa-spin"></i>
+            Checking
+        </span>
+    </span>
+    <a href="{{ link.href }}"> {{ link.href }}</a>
+    <span ng-show="statusCodeResult(link.checkResult.statusCode) === undefined">
+        ...
+    </span>
 </div>

@@ -9,14 +9,22 @@
         <input ng-model="url_to_scrape" type="text" name="url_to_scrape" id="url-to-scrape" class="form-control" placeholder="Enter URL To Check For Broken Links">
     </div>
     <div class="row">
-        <div class="span6 btn-center">
-            <button ng-click="startRunningTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge">GO!</button>
+        <div ng-switch="parseOriginalUrlStatus">
+            <div ng-switch-when="calling">
+                <making-call-spinner ng-show="!done_scraping_original_url"></making-call-spinner>
+            </div>
+            <div ng-switch-when="invalid">
+                <div class="span6 btn-center error">
+                    The URL you provided was invalid. Please try again.
+                </div>
+            </div>
         </div>
-    </div>
 
-    <making-call-spinner ng-show="runningTest && !done_scraping_original_url"></making-call-spinner>
-    <test-url-status ng-show="done_scraping_original_url" ng-repeat="test_url in retrieved_urls track by $index"></test-url-status>
-    <pre>
-        {{ externalWebSiteJSON }}
-    </pre>
-</div>
+        <div ng-show="parseOriginalUrlStatus !== 'calling'">
+            <div class="span6 btn-center">
+                <button ng-click="startRunningTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge">GO!</button>
+            </div>
+        </div>
+
+        <test-url-status ng-show="done_scraping_original_url" ng-repeat="link in retrieved_urls track by $index"></test-url-status>
+    </div>
