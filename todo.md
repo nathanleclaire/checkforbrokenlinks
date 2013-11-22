@@ -9,3 +9,4 @@
 - Figure out why sometimes the app just bricks and won't call anything
 - possibly switch `ng-repeat` over to using a table
 - "PWM" animation while calling out to external server
+- Handle case where silly goose submits a link that has no hyperlinks :)
