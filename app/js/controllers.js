@@ -53,7 +53,7 @@ controller('MainCtrl', function($scope, $http) {
             });
     };
     $scope.checkUrl = function(url_to_check_index) {
-        console.log("checking ", $scope.retrieved_urls[url_to_check_index]).href;
+        console.log("checking ", $scope.retrieved_urls[url_to_check_index].href);
         $http.get('/check', {
             params: {
                 url_to_check: $scope.retrieved_urls[url_to_check_index].href
