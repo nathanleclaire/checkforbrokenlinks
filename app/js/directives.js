@@ -5,7 +5,7 @@
 angular.module('myApp.directives', []).
 directive('testUrlStatus', function() {
     return {
-        restrict: 'E',
+        restrict: 'A',
         templateUrl: '/partials/test_url.html',
         transclude: true
     }

@@ -1,19 +1,24 @@
-<div class="row">
+<td>
+    {{ $index }}
+</td>
+<td>
     <span ng-switch="statusCodeResult(link.checkResult.statusCode)">
         <span ng-switch-when="false">
             <i class="fa fa-times error"></i> 
-            <span class="error">Broken:</span>
+            <span class="error">Broken</span>
         </span>
         <span ng-switch-when="true">
-            <i class="fa fa-check success"></i> Healthy:
+            <i class="fa fa-check success"></i> Healthy
         </span>
         <span ng-switch-default>
             <i class="fa fa-spinner fa-spin"></i>
             Checking
         </span>
     </span>
+</td>
+<td>
     <a href="{{ link.href }}"> {{ link.href }}</a>
     <span ng-show="statusCodeResult(link.checkResult.statusCode) === undefined">
         ...
     </span>
-</div>
+</td>
