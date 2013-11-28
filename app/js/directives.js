@@ -9,7 +9,7 @@ angular.module('myApp.directives', []).
 			// but there are issues getting it to work with table rows.
 			restrict: 'A',
 			controller: function($scope, $http) {
-				$scope.check = function() {
+				var check = function() {
 					console.log("checking ", $scope.href);
 					$http.get('/check', {
 							params: {
@@ -20,7 +20,7 @@ angular.module('myApp.directives', []).
 							$scope.statusCodeResult = (data.statusCode === 200);
 						});
 				};
-				$scope.$on('checkLinks', $scope.check);
+				$scope.$on('checkLinks', check);
 			},
 			link: function(scope, elem, attrs) {
 				scope.$emit('directivesReady');
