@@ -5621,13 +5621,13 @@ body {
 .large-spin {
     font-size: 80px;
 }
-.error {
+.error-inline {
     color:red;
 }
 .success {
     color: green;
 }
-i.error {
+i.error-inline {
     margin-left: 2px;
     margin-right: 1px;
 }
