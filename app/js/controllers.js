@@ -7,7 +7,7 @@ controller('MainCtrl', function($scope, $http) {
     $scope.parseOriginalUrlStatus = 'waiting';
     $scope.done_scraping_original_url = false;
 
-    $scope.startRunningTest = function() {
+    $scope.runTest = function() {
 		$scope.done_scraping_original_url = false;
         $scope.linksInfo = [];
         $scope.parseOriginalUrlStatus = 'calling';
