@@ -30,7 +30,9 @@ controller('MainCtrl', function($scope, $http) {
 							var links = data.links;
 							if (links.length > 1) {
 								$scope.retrieved_urls = links;
-								$scope.$broadcast('checkLinks');
+								$scope.$on('directivesReady', function() {
+									$scope.$broadcast('checkLinks');
+								});
 							} else {
 								$scope.parseOriginalUrlStatus = 'invalid';	
 							}

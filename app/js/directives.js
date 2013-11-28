@@ -20,9 +20,10 @@ angular.module('myApp.directives', []).
 							$scope.statusCodeResult = (data.statusCode === 200);
 						});
 				};
+				$scope.$on('checkLinks', $scope.check);
 			},
-			link: function(scope, element, attrs) {
-				scope.$on('checkLinks', scope.check);
+			link: function(scope, elem, attrs) {
+				scope.$emit('directivesReady');
 			},
 			templateUrl: '/partials/test_url.html',
 		}
