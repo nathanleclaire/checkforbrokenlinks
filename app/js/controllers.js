@@ -37,17 +37,21 @@ controller('MainCtrl', function($scope, $http) {
                     $scope.externalWebSiteJSON = angular.toJson(data, true);
                     if (data.success) {
                         var links = data.links;
-                        var linksInfo = [];
-                        for (var i = 0; i < links.length; i++) {
-                            linksInfo.push({
-                                href: links[i],
-                                checkResult: undefined,
-                            });
-                        }
-                        $scope.retrieved_urls = linksInfo;
-                        for (var i = 0; i < linksInfo.length; i++) {
-                            $scope.checkUrl(i);
-                        }
+						if (links.length > 1) {
+							var linksInfo = [];
+							for (var i = 0; i < links.length; i++) {
+								linksInfo.push({
+									href: links[i],
+									checkResult: undefined,
+								});
+							}
+							$scope.retrieved_urls = linksInfo;
+							for (var i = 0; i < linksInfo.length; i++) {
+								$scope.checkUrl(i);
+							}
+						} else {
+							$scope.parseOriginalUrlStatus = 'invalid';	
+						}
                     }
                 }
 
