@@ -7,9 +7,6 @@ controller('MainCtrl', function($scope, $http) {
     $scope.parseOriginalUrlStatus = 'waiting';
     $scope.done_scraping_original_url = false;
 
-    $scope.statusCodeResult = function(statusCode) {
-    };
-
     $scope.startRunningTest = function() {
 		$scope.done_scraping_original_url = false;
         $scope.linksInfo = [];
