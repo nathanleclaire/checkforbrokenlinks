@@ -1,7 +1,5 @@
 - Create "About" and "Feedback" pages
 - Move over to using async index.html page??
 - Decide whether or not to serve static files using Go depending on environment variable (or command line arg) - use nginx in production
-- Move over to proper directive solution instead of list hack
-    - On this note, see this video : https://egghead.io/lessons/angularjs-directive-to-directive-communication.  The subsection of the `MainCtrl` that makes the `$http` request should actually be its own controller on a directive with isolate scope.  There should be two directives, one to pass in the url to test as an attribute and run the actual call, and another to just display the HTML results/processing status (which is a `restrict: 'E'` directive).  The repeated directives' isolated scope controllers should listen for an event indicating that the original call to parse links has returned (and thus the list of URLs to check has been populated)- the `MainCtrl` will broadcast this event.
 - "PWM" animation while calling out to external server
 - add cancel square to table to allow for clearing of results
