@@ -18,6 +18,7 @@ controller('MainCtrl', function($scope, $http) {
     };
 
     $scope.startRunningTest = function() {
+		$scope.done_scraping_original_url = false;
         $scope.linksInfo = [];
         $scope.parseOriginalUrlStatus = 'calling';
         $http.get('/slurp', {
