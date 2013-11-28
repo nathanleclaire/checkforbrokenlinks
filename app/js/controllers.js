@@ -8,13 +8,6 @@ controller('MainCtrl', function($scope, $http) {
     $scope.done_scraping_original_url = false;
 
     $scope.statusCodeResult = function(statusCode) {
-        if (statusCode === undefined) {
-            return undefined;
-        }
-        if (statusCode === 200) {
-            return true;
-        }
-        return false;
     };
 
     $scope.startRunningTest = function() {
@@ -39,17 +32,8 @@ controller('MainCtrl', function($scope, $http) {
 						if (data.success) {
 							var links = data.links;
 							if (links.length > 1) {
-								var linksInfo = [];
-								for (var i = 0; i < links.length; i++) {
-									linksInfo.push({
-										href: links[i],
-										checkResult: undefined,
-									});
-								}
-								$scope.retrieved_urls = linksInfo;
-								for (var i = 0; i < linksInfo.length; i++) {
-									$scope.checkUrl(i);
-								}
+								$scope.retrieved_urls = links;
+								$scope.$broadcast('checkLinks');
 							} else {
 								$scope.parseOriginalUrlStatus = 'invalid';	
 							}

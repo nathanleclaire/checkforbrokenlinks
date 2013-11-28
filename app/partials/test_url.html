@@ -2,7 +2,7 @@
     {{ $index }}
 </td>
 <td>
-    <span ng-switch="statusCodeResult(link.checkResult.statusCode)">
+	<span ng-switch="statusCodeResult">
         <span ng-switch-when="false">
             <i class="fa fa-times error-inline"></i> 
             <span class="error-inline">Broken</span>
@@ -17,5 +17,5 @@
     </span>
 </td>
 <td>
-    <a href="{{ link.href }}"> {{ link.href }}</a>
+    <a href="{{ href }}"> {{ href }}</a>
 </td>
