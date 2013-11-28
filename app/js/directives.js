@@ -22,9 +22,6 @@ angular.module('myApp.directives', []).
 				};
 				$scope.$on('checkLinks', check);
 			},
-			link: function(scope, elem, attrs) {
-				scope.$emit('directivesReady');
-			},
 			templateUrl: '/partials/test_url.html',
 		}
 	})

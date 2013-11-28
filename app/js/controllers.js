@@ -30,9 +30,8 @@ controller('MainCtrl', function($scope, $http) {
 							var links = data.links;
 							if (links.length > 1) {
 								$scope.retrieved_urls = links;
-								$scope.$on('directivesReady', function() {
-									$scope.$broadcast('checkLinks');
-								});
+								$scope.$apply();
+								$scope.$broadcast('checkLinks');
 							} else {
 								$scope.parseOriginalUrlStatus = 'invalid';	
 							}
@@ -44,15 +43,4 @@ controller('MainCtrl', function($scope, $http) {
 			$scope.parseOriginalUrlStatus = 'invalid';
 		}
     };
-    $scope.checkUrl = function(url_to_check_index) {
-        console.log("checking ", $scope.retrieved_urls[url_to_check_index].href);
-        $http.get('/check', {
-            params: {
-                url_to_check: $scope.retrieved_urls[url_to_check_index].href
-            }
-        })
-            .success(function(data) {
-                $scope.retrieved_urls[url_to_check_index].checkResult = data;
-            })
-    }
 });
