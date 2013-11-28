@@ -5609,6 +5609,7 @@ body {
     -moz-border-radius: 8px;
     border-radius: 8px;
     margin-top:10.5px;
+	margin-bottom:10.5px;
 }
 .btn-center {
     text-align: center;
