@@ -22,7 +22,7 @@
             <making-call-spinner ng-show="!done_scraping_original_url"></making-call-spinner>
         </div>
         <div ng-switch-when="invalid">
-            <div class="alert alert-dismissable alert-danger btn-center">
+            <div class="alert alert-dismissable alert-danger center">
                 The URL you provided did not return anything useful. Please try again (make sure your URL is prefaced with "http://" or "https://").
 				<cancel-x></cancel-x>
             </div>
@@ -30,7 +30,7 @@
     </div>
 
     <div ng-show="parseOriginalUrlStatus !== 'calling'">
-        <div class="span6 btn-center">
+        <div class="span6 center">
 			<input type="submit" ng-click="runTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge" value="GO!"></input>
         </div>
     </div>
