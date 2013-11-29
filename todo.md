@@ -2,4 +2,3 @@
 - Move over to using async index.html page??
 - Decide whether or not to serve static files using Go depending on environment variable (or command line arg) - use nginx in production
 - "PWM" animation while calling out to external server
-- add cancel square to table to allow for clearing of results
