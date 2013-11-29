@@ -3,14 +3,21 @@
 /* Controllers */
 
 angular.module('myApp.controllers', []).
-controller('MainCtrl', function($scope, $http) {
-    $scope.parseOriginalUrlStatus = 'waiting';
-    $scope.done_scraping_original_url = false;
+controller('MainCtrl', function($scope, $http, $timeout) {
+	// reset state of MainCtrl
+	$scope.clearResults = function() {
+		$scope.url_to_scrape = '';
+		$scope.linksInfo = [];
+		$scope.parseOriginalUrlStatus = 'waiting';
+		$scope.done_scraping_original_url = false;
+	};
+
+	$scope.clearResults();
 
     $scope.runTest = function() {
 		$scope.done_scraping_original_url = false;
-        $scope.linksInfo = [];
         $scope.parseOriginalUrlStatus = 'calling';
+        $scope.linksInfo = [];
 		if (!$scope.linkCheckForm.url_to_scrape.$error.pattern) {
 			$http.get('/slurp', {
 				params: {

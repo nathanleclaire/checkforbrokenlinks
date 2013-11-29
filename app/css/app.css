@@ -5631,3 +5631,6 @@ i.error-inline {
     margin-left: 2px;
     margin-right: 1px;
 }
+.clear-results {
+	cursor: pointer;
+}

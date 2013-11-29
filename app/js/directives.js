@@ -30,4 +30,10 @@ angular.module('myApp.directives', []).
             restrict: 'E',
             templateUrl: '/partials/call_spinner.html',
         }
-    });
+    })
+	.directive('cancelX', function() {
+		return {
+			restrict: 'E',
+			templateUrl: '/partials/cancel_x.html',
+		}
+	});
