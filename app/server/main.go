@@ -37,11 +37,17 @@ func connectToSmtpServer(emailUser *EmailUser) {
 	auth := smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
 	log.Print("first arg for SendMail is ", emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port))
 	log.Print(emailUser)
+	msg := `From: Check For Broken Links
+To: Nathan LeClaire
+Subject: This Is A Test
+
+	Please do not panic, it is only a test.
+	`
 	err = smtp.SendMail(emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port),
 						 auth,
 						 emailUser.Username,
 						 []string{"nathanleclaire@gmail.com"},
-					     []byte("This is a test email do not panic it is only a test"))
+					     []byte(msg))
 	if err != nil {
 		log.Print("ERROR: attempting to send a mail ", err)
 	}
