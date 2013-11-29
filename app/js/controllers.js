@@ -37,8 +37,9 @@ controller('MainCtrl', function($scope, $http, $timeout) {
 							var links = data.links;
 							if (links.length > 1) {
 								$scope.retrieved_urls = links;
-								$scope.$apply();
-								$scope.$broadcast('checkLinks');
+								$timeout(function() {
+									$scope.$broadcast('checkLinks');
+								});
 							} else {
 								$scope.parseOriginalUrlStatus = 'invalid';	
 							}
