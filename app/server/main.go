@@ -6,11 +6,45 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"net/smtp"
+	"io/ioutil"
+	"strconv"
 )
 
 type ParsedResponse struct {
 	Success bool     `json:"success"`
 	Links   []string `json:"links"`
+}
+
+type EmailUser struct {
+	Username	string
+	Password	string
+	EmailServer	string
+	Port		int
+}
+
+var emailUser EmailUser
+
+func connectToSmtpServer(emailUser *EmailUser) {
+	smtpConf, err := ioutil.ReadFile("../conf/smtp.json")
+	if err != nil {
+		log.Print("error reading smtp config file ", err)
+	}
+	err = json.Unmarshal(smtpConf, emailUser)
+	if err != nil {
+		log.Print("error unmarshalling config ", err)
+	}
+	auth := smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
+	log.Print("first arg for SendMail is ", emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port))
+	log.Print(emailUser)
+	err = smtp.SendMail(emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port),
+						 auth,
+						 emailUser.Username,
+						 []string{"nathanleclaire@gmail.com"},
+					     []byte("This is a test email do not panic it is only a test"))
+	if err != nil {
+		log.Print("ERROR: attempting to send a mail ", err)
+	}
 }
 
 func getFailedSlurpResponse() []byte {
@@ -85,13 +119,16 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseJSON)
 }
 
-// To Implement:  Slurp Handler or another handler should use h5 to 
-//                grab all href attributes from <a> tags in the DOM slurped
-//                (pass it as a string[] in a struct, marshalled to JSON)
+func emailHandler(w http.ResponseWriter, r *http.Request) {
+	// decode Gmail settings from encrypted config file
+	// connect to Gmail STMP server
+}
 
 func main() {
+	connectToSmtpServer(&emailUser)
 	http.HandleFunc("/slurp", slurpHandler)
 	http.HandleFunc("/check", checkHandler)
+	http.HandleFunc("/email", emailHandler)
 	http.Handle("/", http.FileServer(http.Dir("..")))
 	http.Handle("/css/", http.FileServer(http.Dir("..")))
 	http.Handle("/img/", http.FileServer(http.Dir("..")))
