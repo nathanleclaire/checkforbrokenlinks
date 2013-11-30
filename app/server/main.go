@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"encoding/json"
 	"github.com/PuerkitoBio/goquery"
 	"log"
@@ -161,21 +160,22 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonResponse []byte
+	response := map[string]interface{} {
+		"success": true,
+	}
 	err := r.ParseForm()
 	if err != nil {
 		log.Print("aww fiddlesticks ", err)
+		response["success"] = false
 	}
 	yourName := r.FormValue("yourName")
 	yourEmail := r.FormValue("yourEmail")
 	feedback := r.FormValue("feedback")
-	log.Print("r.Body is ", r.Body)
-	log.Print("r.Form is ", r.Form)
-	r.Write(os.Stdout)
 	go sendMail(yourName + fmt.Sprintf(" <%s>", yourEmail),
 				"Nathan LeClaire <nathan.leclaire@gmail.com>",
 				"CFBL Feedback from " + yourName,
 				feedback)
-	jsonResponse, err = json.Marshal(r)
+	jsonResponse, err = json.Marshal(response)
 	if err != nil {
 		log.Print("marshalling r " , err)
 	}
