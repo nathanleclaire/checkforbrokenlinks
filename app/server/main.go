@@ -34,6 +34,12 @@ type SmtpTemplateData struct {
 	Body string
 }
 
+type SendEmailData struct {
+	YourEmail string
+	YourName string
+	Feedback string
+}
+
 var emailUser EmailUser
 var auth smtp.Auth
 
@@ -160,21 +166,22 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonResponse []byte
+	var err error
 	response := map[string]interface{} {
 		"success": true,
 	}
-	err := r.ParseForm()
+	log.Print(r.Body)
+	dec := json.NewDecoder(r.Body)
+	contactData := SendEmailData{}
+	err = dec.Decode(&contactData)
 	if err != nil {
-		log.Print("aww fiddlesticks ", err)
+		log.Print(err)
 		response["success"] = false
 	}
-	yourName := r.FormValue("yourName")
-	yourEmail := r.FormValue("yourEmail")
-	feedback := r.FormValue("feedback")
-	go sendMail(yourName + fmt.Sprintf(" <%s>", yourEmail),
+	go sendMail(contactData.YourName + fmt.Sprintf(" <%s>", contactData.YourEmail),
 				"Nathan LeClaire <nathan.leclaire@gmail.com>",
-				"CFBL Feedback from " + yourName,
-				feedback)
+				"CFBL Feedback from " + contactData.YourName,
+				contactData.Feedback)
 	jsonResponse, err = json.Marshal(response)
 	if err != nil {
 		log.Print("marshalling r " , err)
