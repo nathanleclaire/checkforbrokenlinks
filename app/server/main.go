@@ -9,6 +9,7 @@ import (
 	"net/smtp"
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 type ParsedResponse struct {
@@ -64,7 +65,7 @@ func getFailedSlurpResponse() []byte {
 }
 
 func slurpHandler(w http.ResponseWriter, r *http.Request) {
-	url_to_scrape := r.URL.Query().Get("url_to_scrape")
+	url_to_scrape := strings.ToLower( r.URL.Query().Get("url_to_scrape") )
 
 	var doc *goquery.Document
 	var e error
