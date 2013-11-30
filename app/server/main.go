@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"encoding/json"
 	"github.com/PuerkitoBio/goquery"
 	"log"
@@ -41,10 +43,14 @@ func sendMail(from string, to string, subject string, body string) error {
 To: {{.To}} 
 Subject: {{.Subject}}
 
-{{.Body}}`
+{{.Body}}
+
+Sincerely,
+
+{{.From}}
+`
 	var err error
 	var doc bytes.Buffer
-	log.Print("emailUser ", emailUser)
 	context := &SmtpTemplateData{from, to, subject, body}
 	log.Print(context)
 	t := template.New("emailTemplate")
@@ -154,17 +160,30 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
-	// decode Gmail settings from encrypted config file
-	// connect to Gmail STMP server
-
+	var jsonResponse []byte
+	err := r.ParseForm()
+	if err != nil {
+		log.Print("aww fiddlesticks ", err)
+	}
+	yourName := r.FormValue("yourName")
+	yourEmail := r.FormValue("yourEmail")
+	feedback := r.FormValue("feedback")
+	log.Print("r.Body is ", r.Body)
+	log.Print("r.Form is ", r.Form)
+	r.Write(os.Stdout)
+	go sendMail(yourName + fmt.Sprintf(" <%s>", yourEmail),
+				"Nathan LeClaire <nathan.leclaire@gmail.com>",
+				"CFBL Feedback from " + yourName,
+				feedback)
+	jsonResponse, err = json.Marshal(r)
+	if err != nil {
+		log.Print("marshalling r " , err)
+	}
+	w.Write(jsonResponse)
 }
 
 func main() {
 	connectToSmtpServer(&emailUser)
-	err := sendMail("CheckForBrokenLinks", "Nathan LeClaire", "Don't Panic!!", "This is only a test.")
-	if err != nil {
-		log.Print("issue calling sendMail in main function . . . ", err)
-	}
 	http.HandleFunc("/slurp", slurpHandler)
 	http.HandleFunc("/check", checkHandler)
 	http.HandleFunc("/email", emailHandler)
@@ -174,7 +193,7 @@ func main() {
 	http.Handle("/lib/", http.FileServer(http.Dir("..")))
 	http.Handle("/partials/", http.FileServer(http.Dir("..")))
 	http.Handle("/js/", http.FileServer(http.Dir("..")))
-	err = http.ListenAndServe(":8000", nil)
+	err := http.ListenAndServe(":8000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

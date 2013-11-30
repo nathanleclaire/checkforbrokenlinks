@@ -15,6 +15,14 @@ config(['$routeProvider',
             templateUrl: 'partials/main.html',
             controller: 'MainCtrl'
         });
+		$routeProvider.when('/about', {
+			templateUrl: 'partials/about.html',
+			controller: 'MainCtrl',
+		});
+		$routeProvider.when('/contact', {
+			templateUrl: 'partials/contact.html',
+			controller: 'ContactCtrl',
+		});
         $routeProvider.otherwise({
             redirectTo: '/'
         });

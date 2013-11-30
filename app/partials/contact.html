@@ -1,0 +1,34 @@
+<div class="row">
+    <h1><i class="fa fa-envelope"></i> Contact </h1>
+</div>
+<div class="row">
+	<p> Please send any suggestions, comments, or questions you have.  It will help to make <a href="#">checkforbrokenlinks.com</a> better in the future. </p>
+	<form name="contactForm" role="form" class="form-horizontal">
+		<div class="form-group">
+			<label for="yourName" class="col-sm-2 control-label">Your Name:</label>
+			<div class="col-sm-10">
+				<input type="name" class="form-control" name="yourName" ng-model="yourName" placeholder="Your Name . . .">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="yourEmail" class="col-sm-2 control-label">Your Email Address:</label>
+			<div class="col-sm-10">
+				<input type="email" class="form-control" name="yourEmail" ng-model="yourEmail" placeholder="Your Email . . .">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="feedback" class="col-sm-2 control-label">Your Feedback:</label>
+			<div class="col-sm-10">
+				<textarea rows="3" class="form-control" name="feedback" ng-model="feedback" placeholder="Your Feedback . . ."></textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2 col-sm-offset-10">
+				<input ng-click="submitFeedback()" type="submit" class="form-control" value="Submit Feedback">
+			</div>
+		</div>
+	</form>
+</div>
+<div class="row" ng-show="successfullySubmitted">
+	<div class="alert alert-dismissable alert-success center"> Sweet bro, we got your feedback! </div>
+</div>

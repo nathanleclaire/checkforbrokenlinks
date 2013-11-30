@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', []).
-controller('MainCtrl', function($scope, $http, $timeout) {
+angular.module('myApp.controllers', [])
+.controller('MainCtrl', function($scope, $http, $timeout) {
 	// reset state of MainCtrl
 	$scope.clearResults = function() {
 		$scope.url_to_scrape = '';
@@ -51,4 +51,18 @@ controller('MainCtrl', function($scope, $http, $timeout) {
 			$scope.parseOriginalUrlStatus = 'invalid';
 		}
     };
+})
+.controller('ContactCtrl', function($scope, $http) {
+	$scope.successfullySubmitted = false;
+	$scope.submitFeedback = function() {
+			$http.post('/email', {
+				yourName : $scope.yourName,
+				yourEmail : $scope.yourEmail,
+				feedback : $scope.feedback
+			})
+			.success(function(data) {
+				$scope.successfullySubmitted = true;
+			});
+
+	}
 });
