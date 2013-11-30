@@ -10,6 +10,8 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"text/template"
+	"bytes"
 )
 
 type ParsedResponse struct {
@@ -24,7 +26,48 @@ type EmailUser struct {
 	Port		int
 }
 
+type SmtpTemplateData struct {
+	From string
+	To string
+	Subject string
+	Body string
+}
+
 var emailUser EmailUser
+var auth smtp.Auth
+
+func sendMail(from string, to string, subject string, body string) error {
+	const emailTemplate = `From: {{.From}}
+To: {{.To}} 
+Subject: {{.Subject}}
+
+{{.Body}}`
+	var err error
+	var doc bytes.Buffer
+	log.Print("emailUser ", emailUser)
+	context := &SmtpTemplateData{from, to, subject, body}
+	log.Print(context)
+	t := template.New("emailTemplate")
+	t, err = t.Parse(emailTemplate)
+	if err != nil {
+		log.Print("error trying to parse mail template ", err)
+	}
+	err = t.Execute(&doc, context)
+	if err != nil {
+		log.Print("error trying to execute mail template ", err)
+	}
+	log.Print(doc.String())
+	err = smtp.SendMail(emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port),
+						 auth,
+						 emailUser.Username,
+						 []string{"nathanleclaire@gmail.com"},
+					     doc.Bytes())
+	if err != nil {
+		log.Print("ERROR: attempting to send a mail ", err)
+	}
+
+	return nil
+}
 
 func connectToSmtpServer(emailUser *EmailUser) {
 	smtpConf, err := ioutil.ReadFile("../conf/smtp.json")
@@ -35,23 +78,7 @@ func connectToSmtpServer(emailUser *EmailUser) {
 	if err != nil {
 		log.Print("error unmarshalling config ", err)
 	}
-	auth := smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
-	log.Print("first arg for SendMail is ", emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port))
-	log.Print(emailUser)
-	msg := `From: Check For Broken Links
-To: Nathan LeClaire
-Subject: This Is A Test
-
-	Please do not panic, it is only a test.
-	`
-	err = smtp.SendMail(emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port),
-						 auth,
-						 emailUser.Username,
-						 []string{"nathanleclaire@gmail.com"},
-					     []byte(msg))
-	if err != nil {
-		log.Print("ERROR: attempting to send a mail ", err)
-	}
+	auth = smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
 }
 
 func getFailedSlurpResponse() []byte {
@@ -129,10 +156,15 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	// decode Gmail settings from encrypted config file
 	// connect to Gmail STMP server
+
 }
 
 func main() {
 	connectToSmtpServer(&emailUser)
+	err := sendMail("CheckForBrokenLinks", "Nathan LeClaire", "Don't Panic!!", "This is only a test.")
+	if err != nil {
+		log.Print("issue calling sendMail in main function . . . ", err)
+	}
 	http.HandleFunc("/slurp", slurpHandler)
 	http.HandleFunc("/check", checkHandler)
 	http.HandleFunc("/email", emailHandler)
@@ -142,7 +174,7 @@ func main() {
 	http.Handle("/lib/", http.FileServer(http.Dir("..")))
 	http.Handle("/partials/", http.FileServer(http.Dir("..")))
 	http.Handle("/js/", http.FileServer(http.Dir("..")))
-	err := http.ListenAndServe(":8000", nil)
+	err = http.ListenAndServe(":8000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
