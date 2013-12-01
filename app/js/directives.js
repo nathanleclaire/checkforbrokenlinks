@@ -10,7 +10,6 @@ angular.module('myApp.directives', []).
 			restrict: 'A',
 			controller: function($scope, $http) {
 				var check = function() {
-					console.log("checking ", $scope.href);
 					$http.get('/check', {
 							params: {
 								url_to_check: $scope.href
@@ -33,6 +32,9 @@ angular.module('myApp.directives', []).
     })
 	.directive('cancelX', function() {
 		return {
+			scope: {
+				clearFunc: '='
+			},
 			restrict: 'E',
 			templateUrl: '/partials/cancel_x.html',
 		}

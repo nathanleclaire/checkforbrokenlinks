@@ -40,9 +40,7 @@ angular.module('myApp.controllers', [])
 				}
 			})
 				.success(function(data) {
-					console.log(data);
 					if (!data.success) {
-						console.log('no success');
 						$scope.parseOriginalUrlStatus = 'invalid';
 					} else {
 						$scope.parseOriginalUrlStatus = 'waiting';
@@ -68,13 +66,22 @@ angular.module('myApp.controllers', [])
     };
 })
 .controller('ContactCtrl', function($scope, $http) {
-	$scope.successfullySubmitted = false;
+	var defaultContactForm = {
+		yourName: '',
+		yourEmail: '',
+		feedback: ''
+	};
+
+	$scope.clear = function() {
+		$scope.successfullySubmitted = false;
+		$scope.contactForm.$setPristine();
+		angular.copy(defaultContactForm, $scope.contact);
+	};
+
+	angular.copy(defaultContactForm, $scope.contact);
+
 	$scope.submitFeedback = function() {
-			$http.post('/email', {
-				yourName : $scope.yourName,
-				yourEmail : $scope.yourEmail,
-				feedback : $scope.feedback
-			})
+			$http.post('/email', $scope.contact)
 			.success(function(data) {
 				$scope.successfullySubmitted = true;
 			});

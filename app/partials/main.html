@@ -24,7 +24,7 @@
         <div ng-switch-when="invalid">
             <div class="alert alert-dismissable alert-danger center">
                 The URL you provided did not return anything useful. Please try again (make sure your URL is prefaced with "http://" or "https://").
-				<cancel-x></cancel-x>
+				<cancel-x clear-func="clearResults"></cancel-x>
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
 					<th>Status</th>
 					<th>
 						Link
-						<cancel-x></cancel-x>
+						<cancel-x clear-func="clearResults"></cancel-x>
 					</th>
 				</tr>
 			</thead>
