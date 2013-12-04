@@ -3,20 +3,10 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-.controller('NavCtrl', function($scope) {
-	$scope.activeTab = '';
-
-	$scope.navigateHome = function() {
-		$scope.activeTab = '';
-	}
-
-	$scope.navigateAbout = function() {
-		$scope.activeTab = 'about';
-	}
-
-	$scope.navigateContact = function() {
-		$scope.activeTab = 'contact';
-	}
+.controller('NavCtrl', function($scope, $location) {
+	$scope.isActive = function(route) {
+		return route === $location.path();
+	};
 })
 .controller('MainCtrl', function($scope, $http, $timeout) {
 	// reset state of MainCtrl
