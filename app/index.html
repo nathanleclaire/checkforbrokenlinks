@@ -15,10 +15,10 @@
             <div class="navbar-brand"><a ng-click="navigateHome()" href="#"><i class="fa fa-chain-broken"></i> Check For Broken Links</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-				<li ng-click="navigateAbout()" ng-class="{'active': (activeTab === 'about')}">
+		<li ng-class="{'active': isActive('/about')}">
                     <a href="#/about"><i class="fa fa-question"></i> About</a>
                 </li>
-                <li ng-click="navigateContact()" ng-class="{'active': (activeTab === 'contact')}">
+                <li ng-class="{'active': isActive('/contact')}">
                     <a href="#/contact"><i class="fa fa-envelope"></i> Feedback</a>
                 </li>
                 <li>
