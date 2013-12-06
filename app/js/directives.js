@@ -8,19 +8,7 @@ angular.module('myApp.directives', []).
 			// I would have preferred to have this as an "element" directive
 			// but there are issues getting it to work with table rows.
 			restrict: 'A',
-			controller: function($scope, $http) {
-				var check = function() {
-					$http.get('/check', {
-							params: {
-								url_to_check: $scope.href
-							}
-						})
-						.success(function(data) {
-							$scope.statusCodeResult = (data.statusCode === 200);
-						});
-				};
-				$scope.$on('checkLinks', check);
-			},
+			controller: 'CheckCtrl',
 			templateUrl: '/partials/test_url.html',
 		}
 	})

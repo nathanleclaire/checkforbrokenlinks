@@ -55,6 +55,19 @@ angular.module('myApp.controllers', [])
 		}
     };
 })
+.controller('CheckCtrl', function($scope, $http) {
+	var check = function() {
+		$http.get('/check', {
+				params: {
+					url_to_check: $scope.href
+				}
+			})
+			.success(function(data) {
+				$scope.statusCodeResult = (data.statusCode === 200);
+			});
+	};
+	$scope.$on('checkLinks', check);
+})
 .controller('ContactCtrl', function($scope, $http) {
 	var defaultContactForm = {
 		yourName: '',
