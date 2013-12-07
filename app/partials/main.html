@@ -6,14 +6,13 @@
 </div>
 <form name="linkCheckForm">
 <div class="row">
-	<div class="form-group" ng-class="{'has-error': linkCheckForm.url_to_scrape.$error.pattern}">
+	<div class="form-group">
 		<input type="text" 
 			   name="url_to_scrape" 
 			   id="url-to-scrape" 
 			   class="form-control" 
 			   placeholder="Enter URL To Check For Broken Links (e.g. http://google.com) . . . "
-			   ng-model="url_to_scrape" 
-			   ng-pattern="/^https*:\/\//i">
+			   ng-model="url_to_scrape">
 	</div>
 </div>
 <div class="row">
@@ -23,7 +22,7 @@
         </div>
         <div ng-switch-when="invalid">
             <div class="alert alert-dismissable alert-danger center">
-                The URL you provided did not return anything useful. Please try again (make sure your URL is prefaced with "http://" or "https://").
+                The URL you provided did not return anything useful.  Please try again.
 				<cancel-x clear-func="clearResults"></cancel-x>
             </div>
         </div>
@@ -39,7 +38,7 @@
 </form>
 <div class="row">
 	<div class="span12">
-		<table class="table table-striped table-bordered" ng-show="done_scraping_original_url">
+		<table class="table table-striped table-bordered" ng-show="done_scraping_original_url && parseOriginalUrlStatus !== 'invalid'">
 			<thead>
 				<tr>
 					<th>#</th>

@@ -7,7 +7,7 @@ angular.module('myApp.controllers', [])
 	$scope.isActive = function(route) {
 		return route === $location.path();
 	};
-})
+}) 
 .controller('MainCtrl', function($scope, $http, $timeout) {
 	// reset state of MainCtrl
 	$scope.clearResults = function() {
@@ -23,36 +23,38 @@ angular.module('myApp.controllers', [])
 		$scope.done_scraping_original_url = false;
         $scope.parseOriginalUrlStatus = 'calling';
         $scope.linksInfo = [];
-		if (!$scope.linkCheckForm.url_to_scrape.$error.pattern) {
-			$http.get('/slurp', {
-				params: {
-					url_to_scrape: $scope.url_to_scrape
-				}
-			})
-				.success(function(data) {
-					if (!data.success) {
-						$scope.parseOriginalUrlStatus = 'invalid';
-					} else {
-						$scope.parseOriginalUrlStatus = 'waiting';
-						$scope.done_scraping_original_url = true;
-						$scope.externalWebSiteJSON = angular.toJson(data, true);
-						if (data.success) {
-							var links = data.links;
-							if (links.length > 1) {
-								$scope.retrieved_urls = links;
-								$timeout(function() {
-									$scope.$broadcast('checkLinks');
-								});
-							} else {
-								$scope.parseOriginalUrlStatus = 'invalid';	
-							}
+        var url_to_scrape = $scope.url_to_scrape;
+        
+        if (!url_to_scrape.match(/^https*:\/\//i)) {
+        	// default to using HTTP
+        	url_to_scrape = 'http://' + url_to_scrape;
+        }
+
+		$http.get('/slurp', {
+			params: {
+				url_to_scrape: url_to_scrape
+			}
+		})
+			.success(function(data) {
+				if (!data.success) {
+					$scope.parseOriginalUrlStatus = 'invalid';
+				} else {
+					$scope.parseOriginalUrlStatus = 'waiting';
+					$scope.done_scraping_original_url = true;
+					if (data.success) {
+						var links = data.links;
+						if (links.length > 1) {
+							$scope.retrieved_urls = links;
+							$timeout(function() {
+								$scope.$broadcast('checkLinks');
+							});
+						} else {
+							$scope.parseOriginalUrlStatus = 'invalid';	
 						}
 					}
+				}
 
-				});
-		} else {
-			$scope.parseOriginalUrlStatus = 'invalid';
-		}
+			});
     };
 })
 .controller('CheckCtrl', function($scope, $http) {
