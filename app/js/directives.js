@@ -9,13 +9,13 @@ angular.module('myApp.directives', []).
 			// but there are issues getting it to work with table rows.
 			restrict: 'A',
 			controller: 'CheckCtrl',
-			templateUrl: '/partials/test_url.html',
+			templateUrl: '/partials/test-url.html',
 		}
 	})
     .directive('makingCallSpinner', function() {
         return {
             restrict: 'E',
-            templateUrl: '/partials/call_spinner.html',
+            templateUrl: '/partials/call-spinner.html',
         }
     })
 	.directive('cancelX', function() {
@@ -24,6 +24,6 @@ angular.module('myApp.directives', []).
 				clearFunc: '='
 			},
 			restrict: 'E',
-			templateUrl: '/partials/cancel_x.html',
+			templateUrl: '/partials/cancel-x.html',
 		}
 	});
