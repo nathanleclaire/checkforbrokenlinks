@@ -103,7 +103,7 @@ func getFailedSlurpResponse() []byte {
 }
 
 func slurpHandler(w http.ResponseWriter, r *http.Request) {
-	url_to_scrape := strings.ToLower( r.URL.Query().Get("url_to_scrape") )
+	urlToScrape := strings.ToLower( r.URL.Query().Get("urlToScrape") )
 
 	var doc *goquery.Document
 	var e error
@@ -111,8 +111,8 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 
 	links := []string{}
 
-	if doc, e = goquery.NewDocument(url_to_scrape); e != nil {
-		log.Print("error querying for document: ", url_to_scrape, "err : ", e)
+	if doc, e = goquery.NewDocument(urlToScrape); e != nil {
+		log.Print("error querying for document: ", urlToScrape, "err : ", e)
 		parsedResponseJSON = getFailedSlurpResponse()
 	} else {
 		crossDomainRegex, err := regexp.Compile(`^http`)
@@ -146,10 +146,10 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func checkHandler(w http.ResponseWriter, r *http.Request) {
-	url_to_check := r.URL.Query().Get("url_to_check")
-	externalServerResponse, err := http.Get(url_to_check)
+	urlToCheck := r.URL.Query().Get("urlToCheck")
+	externalServerResponse, err := http.Get(urlToCheck)
 	if err != nil {
-		log.Print("error getting in checkHandler ", url_to_check)
+		log.Print("error getting in checkHandler ", urlToCheck)
 	}
 
 	response := map[string]interface{}{

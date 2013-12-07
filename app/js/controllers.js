@@ -11,28 +11,28 @@ angular.module('myApp.controllers', [])
 .controller('MainCtrl', function($scope, $http, $timeout) {
 	// reset state of MainCtrl
 	$scope.clearResults = function() {
-		$scope.url_to_scrape = '';
+		$scope.urlToScrape = '';
 		$scope.linksInfo = [];
 		$scope.parseOriginalUrlStatus = 'waiting';
-		$scope.done_scraping_original_url = false;
+		$scope.doneScrapingOriginalUrl = false;
 	};
 
 	$scope.clearResults();
 
     $scope.runTest = function() {
-		$scope.done_scraping_original_url = false;
+		$scope.doneScrapingOriginalUrl = false;
         $scope.parseOriginalUrlStatus = 'calling';
         $scope.linksInfo = [];
-        var url_to_scrape = $scope.url_to_scrape;
+        var urlToScrape = $scope.urlToScrape;
         
-        if (!url_to_scrape.match(/^https*:\/\//i)) {
+        if (!urlToScrape.match(/^https*:\/\//i)) {
         	// default to using HTTP
-        	url_to_scrape = 'http://' + url_to_scrape;
+        	urlToScrape = 'http://' + urlToScrape;
         }
 
 		$http.get('/slurp', {
 			params: {
-				url_to_scrape: url_to_scrape
+				urlToScrape: urlToScrape
 			}
 		})
 			.success(function(data) {
@@ -40,7 +40,7 @@ angular.module('myApp.controllers', [])
 					$scope.parseOriginalUrlStatus = 'invalid';
 				} else {
 					$scope.parseOriginalUrlStatus = 'waiting';
-					$scope.done_scraping_original_url = true;
+					$scope.doneScrapingOriginalUrl = true;
 					if (data.success) {
 						var links = data.links;
 						if (links.length > 1) {
@@ -61,7 +61,7 @@ angular.module('myApp.controllers', [])
 	var check = function() {
 		$http.get('/check', {
 				params: {
-					url_to_check: $scope.href
+					urlToCheck: $scope.href
 				}
 			})
 			.success(function(data) {
@@ -88,6 +88,7 @@ angular.module('myApp.controllers', [])
 	$scope.submitFeedback = function() {
 			$http.post('/email', $scope.contact)
 			.success(function(data) {
+				$scope.clear();
 				$scope.successfullySubmitted = true;
 			});
 
