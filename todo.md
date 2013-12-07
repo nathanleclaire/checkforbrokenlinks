@@ -1,6 +1,5 @@
 - Move over to using async index.html page??
 - Decide whether or not to serve static files using Go depending on environment variable (or command line arg) - use nginx in production
 - "PWM" animation while calling out to external server
-- Move to using only camelCase convention in controllers instead of snake_case
 - Move to using separate go file (possibly totally separate package) for interacting with gmail
 - WRITE UNIT TESTS!!!!!1
