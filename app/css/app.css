@@ -5609,7 +5609,7 @@ body {
     -moz-border-radius: 8px;
     border-radius: 8px;
     margin-top:10.5px;
-	margin-bottom:10.5px;
+    margin-bottom:10.5px;
 }
 .center {
     text-align: center;
@@ -5632,5 +5632,5 @@ i.error-inline {
     margin-right: 1px;
 }
 .clear-results {
-	cursor: pointer;
+    cursor: pointer;
 }

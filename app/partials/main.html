@@ -5,54 +5,49 @@
     <p>It's easy and fun to watch the results show up in realtime. Just enter the URL in question below, and click the big button.</p>
 </div>
 <form name="linkCheckForm">
-<div class="row">
-	<div class="form-group">
-		<input type="text" 
-			   name="urlToScrape" 
-			   id="url-to-scrape" 
-			   class="form-control" 
-			   placeholder="Enter URL To Check For Broken Links (e.g. http://google.com) . . . "
-			   ng-model="urlToScrape">
-	</div>
-</div>
-<div class="row">
-    <div ng-switch="parseOriginalUrlStatus">
-        <div ng-switch-when="calling">
-            <making-call-spinner ng-show="!doneScrapingOriginalUrl"></making-call-spinner>
+    <div class="row">
+        <div class="form-group">
+            <input type="text" name="urlToScrape" id="url-to-scrape" class="form-control" placeholder="Enter URL To Check For Broken Links (e.g. http://google.com) . . . " ng-model="urlToScrape">
         </div>
-        <div ng-switch-when="invalid">
-            <div class="alert alert-dismissable alert-danger center">
-                The URL you provided did not return anything useful.  Please try again.
-				<cancel-x clear-func="clearResults"></cancel-x>
+    </div>
+    <div class="row">
+        <div ng-switch="parseOriginalUrlStatus">
+            <div ng-switch-when="calling">
+                <making-call-spinner ng-show="!doneScrapingOriginalUrl"></making-call-spinner>
+            </div>
+            <div ng-switch-when="invalid">
+                <div class="alert alert-dismissable alert-danger center">
+                    The URL you provided did not return anything useful. Please try again.
+                    <cancel-x clear-func="clearResults"></cancel-x>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div ng-show="parseOriginalUrlStatus !== 'calling'">
-        <div class="span6 center">
-			<input type="submit" ng-click="runTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge" value="GO!"></input>
+        <div ng-show="parseOriginalUrlStatus !== 'calling'">
+            <div class="span6 center">
+                <input type="submit" ng-click="runTest()" ng-show="!runningTest" class="btn btn-primary btn-xlarge" value="GO!"></input>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </form>
 <div class="row">
-	<div class="span12">
-		<table class="table table-striped table-bordered" ng-show="doneScrapingOriginalUrl && parseOriginalUrlStatus !== 'invalid'">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Status</th>
-					<th>
-						Link
-						<cancel-x clear-func="clearResults"></cancel-x>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="href in retrieved_urls track by $index" test-url-status>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+    <div class="span12">
+        <table class="table table-striped table-bordered" ng-show="doneScrapingOriginalUrl && parseOriginalUrlStatus !== 'invalid'">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Status</th>
+                    <th>
+                        Link
+                        <cancel-x clear-func="clearResults"></cancel-x>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="href in retrieved_urls track by $index" test-url-status>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
