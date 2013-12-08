@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"regexp"
 	"net/smtp"
-	"io/ioutil"
+	"regexp"
 	"strconv"
 	"strings"
 	"text/template"
-	"bytes"
 )
 
 type ParsedResponse struct {
@@ -21,23 +21,23 @@ type ParsedResponse struct {
 }
 
 type EmailUser struct {
-	Username	string
-	Password	string
-	EmailServer	string
-	Port		int
+	Username    string
+	Password    string
+	EmailServer string
+	Port        int
 }
 
 type SmtpTemplateData struct {
-	From string
-	To string
+	From    string
+	To      string
 	Subject string
-	Body string
+	Body    string
 }
 
 type SendEmailData struct {
 	YourEmail string
-	YourName string
-	Feedback string
+	YourName  string
+	Feedback  string
 }
 
 var emailUser EmailUser
@@ -68,11 +68,11 @@ Sincerely,
 		log.Print("error trying to execute mail template ", err)
 	}
 	log.Print(doc.String())
-	err = smtp.SendMail(emailUser.EmailServer + ":" + strconv.Itoa(emailUser.Port),
-						 auth,
-						 emailUser.Username,
-						 []string{"nathanleclaire@gmail.com"},
-					     doc.Bytes())
+	err = smtp.SendMail(emailUser.EmailServer+":"+strconv.Itoa(emailUser.Port),
+		auth,
+		emailUser.Username,
+		[]string{"nathanleclaire@gmail.com"},
+		doc.Bytes())
 	if err != nil {
 		log.Print("ERROR: attempting to send a mail ", err)
 	}
@@ -103,7 +103,7 @@ func getFailedSlurpResponse() []byte {
 }
 
 func slurpHandler(w http.ResponseWriter, r *http.Request) {
-	urlToScrape := strings.ToLower( r.URL.Query().Get("urlToScrape") )
+	urlToScrape := strings.ToLower(r.URL.Query().Get("urlToScrape"))
 
 	var doc *goquery.Document
 	var e error
@@ -167,7 +167,7 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonResponse []byte
 	var err error
-	response := map[string]interface{} {
+	response := map[string]interface{}{
 		"success": true,
 	}
 	log.Print(r.Body)
@@ -178,13 +178,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		response["success"] = false
 	}
-	go sendMail(contactData.YourName + fmt.Sprintf(" <%s>", contactData.YourEmail),
-				"Nathan LeClaire <nathan.leclaire@gmail.com>",
-				"CFBL Feedback from " + contactData.YourName,
-				contactData.Feedback)
+	go sendMail(contactData.YourName+fmt.Sprintf(" <%s>", contactData.YourEmail),
+		"Nathan LeClaire <nathan.leclaire@gmail.com>",
+		"CFBL Feedback from "+contactData.YourName,
+		contactData.Feedback)
 	jsonResponse, err = json.Marshal(response)
 	if err != nil {
-		log.Print("marshalling r " , err)
+		log.Print("marshalling r ", err)
 	}
 	w.Write(jsonResponse)
 }
