@@ -1,37 +1,36 @@
-module.exports = function(config){
+module.exports = function(config) {
     config.set({
+        basePath: '../',
 
+        files: [
+            'test/e2e/**/*.js'
+        ],
 
-    basePath : '../',
+        autoWatch: false,
 
-    files : [
-        'test/e2e/**/*.js'
-    ],
+        browsers: ['PhantomJS'],
 
-    autoWatch : false,
+        frameworks: ['ng-scenario'],
 
-    browsers : ['Chrome'],
+        singleRun: true,
 
-    frameworks: ['ng-scenario'],
+        proxies: {
+            '/': 'http://localhost:8000/'
+        },
 
-    singleRun : true,
-
-    proxies : {
-      '/': 'http://localhost:8000/'
-    },
-
-    plugins : [
+        plugins: [
             'karma-junit-reporter',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine',
-            'karma-ng-scenario'
-            ],
+            'karma-ng-scenario',
+            'karma-phantomjs-launcher'
+        ],
 
-    junitReporter : {
-      outputFile: 'test_out/e2e.xml',
-      suite: 'e2e'
-    }
+        junitReporter: {
+            outputFile: 'test_out/e2e.xml',
+            suite: 'e2e'
+        }
 
-})}
-
+    })
+}
