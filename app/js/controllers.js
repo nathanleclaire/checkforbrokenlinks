@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', [])
+angular.module('checkForBrokenLinksApp.controllers', [])
     .controller('NavCtrl', function($scope, $location) {
         $scope.isActive = function(route) {
             return route === $location.path();

@@ -2,12 +2,12 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', [
+angular.module('checkForBrokenLinksApp', [
     'ngRoute',
-    'myApp.filters',
-    'myApp.services',
-    'myApp.directives',
-    'myApp.controllers'
+    'checkForBrokenLinksApp.filters',
+    'checkForBrokenLinksApp.services',
+    'checkForBrokenLinksApp.directives',
+    'checkForBrokenLinksApp.controllers'
 ]).
 config(['$routeProvider',
     function($routeProvider) {

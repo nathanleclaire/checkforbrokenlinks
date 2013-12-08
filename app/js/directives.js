@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('myApp.directives', [])
+angular.module('checkForBrokenLinksApp.directives', [])
     .directive('testUrlStatus', function() {
         return {
             // I would have preferred to have this as an "element" directive

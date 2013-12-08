@@ -2,7 +2,7 @@
 
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
 
-describe('myApp', function() {
+describe('checkForBrokenLinksApp', function() {
 
     beforeEach(function() {
         browser().navigateTo('app/index.html');
