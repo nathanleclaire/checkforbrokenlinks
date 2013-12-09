@@ -44,7 +44,7 @@ angular.module('checkForBrokenLinksApp.controllers', [])
                         if (data.success) {
                             var links = data.links;
                             if (links.length > 1) {
-                                $scope.retrieved_urls = links;
+                                $scope.retrievedUrls = links;
                                 $timeout(function() {
                                     $scope.$broadcast('checkLinks');
                                 });
