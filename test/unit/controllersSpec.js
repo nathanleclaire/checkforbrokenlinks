@@ -82,19 +82,19 @@ describe('controllers', function() {
                     "links": ["http://www.google.com", "http://angularjs.org", "http://amazon.com"]
                 });
 
-			// have to use $apply to trigger the $digest which will
-			// take care of the HTTP request
+            // have to use $apply to trigger the $digest which will
+            // take care of the HTTP request
             $scope.$apply(function() {
                 $scope.runTest();
             });
-			
-			expect($scope.parseOriginalUrlStatus).toEqual('calling');
-                    
+
+            expect($scope.parseOriginalUrlStatus).toEqual('calling');
+
             $httpBackend.flush();
 
-			expect($scope.retrievedUrls).toEqual(["http://www.google.com", "http://angularjs.org", "http://amazon.com"]);	
-			expect($scope.parseOriginalUrlStatus).toEqual('waiting');	
-			expect($scope.doneScrapingOriginalUrl).toEqual(true);	
+            expect($scope.retrievedUrls).toEqual(["http://www.google.com", "http://angularjs.org", "http://amazon.com"]);
+            expect($scope.parseOriginalUrlStatus).toEqual('waiting');
+            expect($scope.doneScrapingOriginalUrl).toEqual(true);
         });
     });
 
