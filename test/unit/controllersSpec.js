@@ -11,8 +11,9 @@ describe('controllers', function() {
         beforeEach(inject(function($injector) {
             $location = $injector.get('$location');
             $rootScope = $injector.get('$rootScope');
-            var $controller = $injector.get('$controller');
             $scope = $rootScope.$new();
+
+            var $controller = $injector.get('$controller');
 
             createController = function() {
                 return $controller('NavCtrl', {
@@ -31,33 +32,61 @@ describe('controllers', function() {
     });
 
     describe('MainCtrl', function() {
-        var scope, rootScope, ctrl, http, timeout;
-        beforeEach(inject(function($http, $timeout, $rootScope, $controller) {
-            http = $http;
-            timeout = $timeout;
-            rootScope = $rootScope;
-            scope = $rootScope.$new();
-            ctrl = $controller('MainCtrl', {
-                $scope: scope
-            });
+        var $scope, $rootScope, $httpBackend, $timeout, createController;
+        beforeEach(inject(function($injector) {
+            $timeout = $injector.get('$timeout');
+            $httpBackend = $injector.get('$httpBackend');
+            $rootScope = $injector.get('$rootScope');
+            $scope = $rootScope.$new();
+
+
+            var $controller = $injector.get('$controller');
+
+            createController = function() {
+                return $controller('MainCtrl', {
+                    '$scope': $scope
+                });
+            };
         }));
 
-        it('should reset scope when the clearResults() method is called', function() {
-            scope.urlToScrape = 'google.com';
-            scope.linksInfo = ['something.com', 'somethinglese.com', 'blahblah.com'];
-            scope.parseOriginalUrlStatus = 'someRandomStatus';
-            scope.doneScrapingOriginalUrl = true;
+        afterEach(function() {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+        });
 
+        it('should reset $scope when the clearResults() method is called', function() {
+            var controller = createController();
 
-            scope.clearResults();
-            expect(scope.linksInfo).toEqual([]);
-            expect(scope.parseOriginalUrlStatus).toEqual('waiting');
-            expect(scope.doneScrapingOriginalUrl).toEqual(false);
+            // setup $scope data to contain something
+            $scope.urlToScrape = 'google.com';
+            $scope.linksInfo = ['something.com', 'somethinglese.com', 'blahblah.com'];
+            $scope.parseOriginalUrlStatus = 'someRandomStatus';
+            $scope.doneScrapingOriginalUrl = true;
+
+            $scope.clearResults();
+            expect($scope.linksInfo).toEqual([]);
+            expect($scope.parseOriginalUrlStatus).toEqual('waiting');
+            expect($scope.doneScrapingOriginalUrl).toEqual(false);
         });
 
         it('should run the Test to get the link data from the go backend', function() {
-            scope.urlToScrape = 'nathanleclaire.com';
+            var controller = createController();
 
+            // use clearResults() for data setup
+            $scope.clearResults();
+            $scope.urlToScrape = 'success.com';
+
+            $httpBackend.when('GET', '/slurp?urlToScrape=http:%2F%2Fsuccess.com')
+                .respond({
+                    "success": true,
+                    "links": ["http://www.google.com", "http://angularjs.org", "http://amazon.com"]
+                });
+
+            $scope.$apply(function() {
+                $scope.runTest();
+            });
+
+            $httpBackend.flush();
         });
     });
 
