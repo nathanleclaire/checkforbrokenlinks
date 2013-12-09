@@ -6,22 +6,27 @@ describe('controllers', function() {
     beforeEach(module('checkForBrokenLinksApp.controllers'));
 
     describe('NavCtrl', function() {
-        var scope, rootScope, ctrl, location;
-        beforeEach(inject(function($location, $rootScope, $controller) {
-            location = $location;
-            rootScope = $rootScope;
-            scope = $rootScope.$new();
-            ctrl = $controller('NavCtrl', {
-                $scope: scope
-            });
+        var $scope, $location, $rootScope, createController;
+
+        beforeEach(inject(function($injector) {
+            $location = $injector.get('$location');
+            $rootScope = $injector.get('$rootScope');
+            var $controller = $injector.get('$controller');
+            $scope = $rootScope.$new();
+
+            createController = function() {
+                return $controller('NavCtrl', {
+                    '$scope': $scope
+                });
+            };
         }));
 
         it('should have a method to check if the path is active', function() {
-            location.path('/about');
-            rootScope.$apply();
-            expect(location.path()).toBe('/about');
-            expect(scope.isActive('/about')).toBe(true);
-            expect(scope.isActive('/contact')).toBe(false);
+            var controller = createController();
+            $location.path('/about');
+            expect($location.path()).toBe('/about');
+            expect($scope.isActive('/about')).toBe(true);
+            expect($scope.isActive('/contact')).toBe(false);
         });
     });
 
@@ -42,14 +47,17 @@ describe('controllers', function() {
             scope.linksInfo = ['something.com', 'somethinglese.com', 'blahblah.com'];
             scope.parseOriginalUrlStatus = 'someRandomStatus';
             scope.doneScrapingOriginalUrl = true;
-            rootScope.$apply();
 
-            //            console.log(scope);
 
             scope.clearResults();
             expect(scope.linksInfo).toEqual([]);
             expect(scope.parseOriginalUrlStatus).toEqual('waiting');
             expect(scope.doneScrapingOriginalUrl).toEqual(false);
+        });
+
+        it('should run the Test to get the link data from the go backend', function() {
+            scope.urlToScrape = 'nathanleclaire.com';
+
         });
     });
 
