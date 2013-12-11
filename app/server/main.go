@@ -68,7 +68,6 @@ Sincerely,
 	var err error
 	var doc bytes.Buffer
 	context := &SmtpTemplateData{from, to, subject, body}
-	log.Print(context)
 	t := template.New("emailTemplate")
 	t, err = t.Parse(emailTemplate)
 	if err != nil {
@@ -78,7 +77,6 @@ Sincerely,
 	if err != nil {
 		log.Print("error trying to execute mail template ", err)
 	}
-	log.Print(doc.String())
 	err = smtp.SendMail(emailUser.EmailServer+":"+strconv.Itoa(emailUser.Port),
 		auth,
 		emailUser.Username,
@@ -190,7 +188,6 @@ func emailHandlerClosure(auth smtp.Auth, recaptchaPrivateKey string, emailUser E
 		response := map[string]interface{}{
 			"success": true,
 		}
-		log.Print(r.Body)
 		dec := json.NewDecoder(r.Body)
 		contactData := SendEmailData{}
 		err = dec.Decode(&contactData)
@@ -211,7 +208,7 @@ func emailHandlerClosure(auth smtp.Auth, recaptchaPrivateKey string, emailUser E
 				"CFBL Feedback from "+contactData.YourName,
 				contactData.Feedback)
 		} else {
-			response["sucess"] = false
+			response["success"] = false
 		}
 		jsonResponse, err = json.Marshal(response)
 		if err != nil {

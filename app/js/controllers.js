@@ -70,26 +70,31 @@ angular.module('checkForBrokenLinksApp.controllers', [])
         };
         $scope.$on('checkLinks', check);
     })
-    .controller('ContactCtrl', function($scope, $http) {
+    .controller('ContactCtrl', function($scope, $http, vcRecaptchaService) {
         var defaultContactForm = {
             yourName: '',
             yourEmail: '',
-            feedback: ''
+            feedback: '',
+            captcha: {}
         };
 
         $scope.clear = function() {
-            $scope.successfullySubmitted = false;
-            $scope.contactForm.$setPristine();
+            //$scope.contactForm.$setPristine();
             angular.copy(defaultContactForm, $scope.contact);
+            vcRecaptchaService.reload();
+            $scope.successfullySubmitted = undefined;
         };
 
         angular.copy(defaultContactForm, $scope.contact);
 
         $scope.submitFeedback = function() {
+            $scope.contact.captcha = vcRecaptchaService.data();
             $http.post('/email', $scope.contact)
                 .success(function(data) {
-                    $scope.clear();
-                    $scope.successfullySubmitted = true;
+                    $scope.successfullySubmitted = data.success;
+                    if (!data.success) {
+                        vcRecaptchaService.reload();
+                    }
                 });
 
         }
