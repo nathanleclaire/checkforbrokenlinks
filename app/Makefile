@@ -1,6 +1,6 @@
 .PHONY: _pwd_prompt decrypt_conf encrypt_conf
  
-CONF_FILE=conf/smtp.json
+CONF_FILE=conf/conf.json
  
 # 'private' task for echoing instructions
 _pwd_prompt:

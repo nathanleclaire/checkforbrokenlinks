@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/dpapathanasiou/go-recaptcha"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -34,16 +35,26 @@ type SmtpTemplateData struct {
 	Body    string
 }
 
+type Configuration struct {
+	Smtp                EmailUser
+	RecaptchaPrivateKey string
+}
+
+type ReCaptcha struct {
+	Response  string
+	Challenge string
+}
+
 type SendEmailData struct {
 	YourEmail string
 	YourName  string
 	Feedback  string
+	Captcha   ReCaptcha
 }
 
-var emailUser EmailUser
-var auth smtp.Auth
+var conf Configuration
 
-func sendMail(from string, to string, subject string, body string) error {
+func sendMail(emailUser EmailUser, auth smtp.Auth, from string, to string, subject string, body string) error {
 	const emailTemplate = `From: {{.From}}
 To: {{.To}} 
 Subject: {{.Subject}}
@@ -80,16 +91,22 @@ Sincerely,
 	return nil
 }
 
-func connectToSmtpServer(emailUser *EmailUser) {
-	smtpConf, err := ioutil.ReadFile("../conf/smtp.json")
+func readConfigurationFile(filepath string) Configuration {
+	var conf Configuration
+	rawConfigurationJson, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Print("error reading smtp config file ", err)
 	}
-	err = json.Unmarshal(smtpConf, emailUser)
+	err = json.Unmarshal(rawConfigurationJson, &conf)
 	if err != nil {
 		log.Print("error unmarshalling config ", err)
 	}
-	auth = smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
+	return conf
+}
+
+func connectToSmtpServer(emailUser EmailUser) smtp.Auth {
+	auth := smtp.PlainAuth("", emailUser.Username, emailUser.Password, emailUser.EmailServer)
+	return auth
 }
 
 func getFailedSlurpResponse() []byte {
@@ -164,36 +181,52 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseJSON)
 }
 
-func emailHandler(w http.ResponseWriter, r *http.Request) {
-	var jsonResponse []byte
-	var err error
-	response := map[string]interface{}{
-		"success": true,
-	}
-	log.Print(r.Body)
-	dec := json.NewDecoder(r.Body)
-	contactData := SendEmailData{}
-	err = dec.Decode(&contactData)
-	if err != nil {
-		log.Print(err)
-		response["success"] = false
-	}
-	go sendMail(contactData.YourName+fmt.Sprintf(" <%s>", contactData.YourEmail),
-		"Nathan LeClaire <nathan.leclaire@gmail.com>",
-		"CFBL Feedback from "+contactData.YourName,
-		contactData.Feedback)
-	jsonResponse, err = json.Marshal(response)
-	if err != nil {
-		log.Print("marshalling r ", err)
-	}
-	w.Write(jsonResponse)
+func emailHandlerClosure(auth smtp.Auth, recaptchaPrivateKey string, emailUser EmailUser) http.HandlerFunc {
+	// Use a closure so we can pass auth to the handler
+	return (func(w http.ResponseWriter, r *http.Request) {
+
+		var jsonResponse []byte
+		var err error
+		response := map[string]interface{}{
+			"success": true,
+		}
+		log.Print(r.Body)
+		dec := json.NewDecoder(r.Body)
+		contactData := SendEmailData{}
+		err = dec.Decode(&contactData)
+		if err != nil {
+			log.Print(err)
+			response["success"] = false
+		}
+
+		// call the recaptcha server
+		recaptcha.Init(recaptchaPrivateKey)
+		captchaIsValid := recaptcha.Confirm(r.RemoteAddr, contactData.Captcha.Challenge, contactData.Captcha.Response)
+
+		if captchaIsValid {
+			go sendMail(emailUser,
+				auth,
+				contactData.YourName+fmt.Sprintf(" <%s>", contactData.YourEmail),
+				"Nathan LeClaire <nathan.leclaire@gmail.com>",
+				"CFBL Feedback from "+contactData.YourName,
+				contactData.Feedback)
+		} else {
+			response["sucess"] = false
+		}
+		jsonResponse, err = json.Marshal(response)
+		if err != nil {
+			log.Print("marshalling r ", err)
+		}
+		w.Write(jsonResponse)
+	})
 }
 
 func main() {
-	connectToSmtpServer(&emailUser)
+	conf = readConfigurationFile("../conf/conf.json")
+	auth := connectToSmtpServer(conf.Smtp)
 	http.HandleFunc("/slurp", slurpHandler)
 	http.HandleFunc("/check", checkHandler)
-	http.HandleFunc("/email", emailHandler)
+	http.HandleFunc("/email", emailHandlerClosure(auth, conf.RecaptchaPrivateKey, conf.Smtp))
 	http.Handle("/", http.FileServer(http.Dir("..")))
 	http.Handle("/css/", http.FileServer(http.Dir("..")))
 	http.Handle("/img/", http.FileServer(http.Dir("..")))
