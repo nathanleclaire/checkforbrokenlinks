@@ -36,13 +36,14 @@
 
     </form>
 </div>
-<div class="row" ng-show="successfullySubmitted">
-    <div class="alert alert-dismissable alert-success center">Sweet bro, we got your feedback!
+<div class="row">
+    <div class="alert alert-dismissable alert-success center message-animate" ng-show="successfullySubmitted">
+        Sweet, we got your feedback!
         <cancel-x clear-func="clear"></cancel-x>
     </div>
 </div>
-<div class="row" ng-show="successfullySubmitted === false">
-    <div class="alert alert-dismissable alert-danger center">Sorry, there was an issue with your captcha. Please try again.
+<div class="row">
+    <div class="alert alert-dismissable alert-danger center message-animate" ng-show="successfullySubmitted === false">Sorry, there was an issue with your captcha. Please try again.
         <cancel-x clear-func="clear"></cancel-x>
     </div>
 </div>

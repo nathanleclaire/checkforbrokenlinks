@@ -4,6 +4,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('checkForBrokenLinksApp', [
     'ngRoute',
+    'ngAnimate',
     'vcRecaptcha',
     'checkForBrokenLinksApp.filters',
     'checkForBrokenLinksApp.services',

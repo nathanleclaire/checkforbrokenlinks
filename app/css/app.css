@@ -5634,3 +5634,12 @@ i.error-inline {
 .clear-results {
     cursor: pointer;
 }
+.message-animate.ng-hide-add, .message-animate.ng-hide-remove {
+    -webkit-transition: 0.5s ease-in-out all;
+    transition: 0.5s ease-in-out all;
+    display: block !important;
+    opacity: 1;
+}
+.message-animate.ng-hide {
+    opacity: 0;
+}
