@@ -5643,3 +5643,30 @@ i.error-inline {
 .message-animate.ng-hide {
     opacity: 0;
 }
+.linkrow-animate.ng-enter, .linkrow-animate.ng-leave, .linkrow-animate.ng-move {
+    -webkit-transition: 0.5s ease-in-out all;
+    transition: 0.5s ease-in-out all;
+    position: relative;
+}
+.linkrow-animate.ng-enter {
+    top: -20px;
+    opacity: 0;
+}
+.linkrow-animate.ng-enter.ng-enter-active {
+    top: 0px;
+    opacity: 1;
+}
+.linkrow-animate.ng-leave {
+    top: 0px;
+    opacity: 1;
+}
+.linkrow-animate.ng-leave.ng-leave-active {
+    left:-20px;
+    opacity:0;
+}
+.linkrow-animate.ng-move {
+    opacity:0.5;
+}
+.linkrow-animate.ng-move.ng-move-active {
+    opacity:1;
+}
