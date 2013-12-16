@@ -3,3 +3,4 @@
 - "PWM" animation while calling out to external server
 - Move to using separate go file (possibly totally separate package) for interacting with gmail
 - WRITE UNIT TESTS!!!!!1
+- Address that one guy on HN's feedback (re: slurpService etc.)
