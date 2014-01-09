@@ -69,12 +69,10 @@ Sincerely,
 	var doc bytes.Buffer
 	context := &SmtpTemplateData{from, to, subject, body}
 	t := template.New("emailTemplate")
-	t, err = t.Parse(emailTemplate)
-	if err != nil {
+	if t, err = t.Parse(emailTemplate); err != nil {
 		log.Print("error trying to parse mail template ", err)
 	}
-	err = t.Execute(&doc, context)
-	if err != nil {
+	if err = t.Execute(&doc, context); err != nil {
 		log.Print("error trying to execute mail template ", err)
 	}
 	err = smtp.SendMail(emailUser.EmailServer+":"+strconv.Itoa(emailUser.Port),
