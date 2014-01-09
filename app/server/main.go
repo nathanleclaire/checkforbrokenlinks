@@ -140,9 +140,10 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 			if exists != true {
 				log.Print("href does not exist for: ", s)
 			} else {
-				// TODO:  Implement handling of same domain links
 				if crossDomainRegex.Match([]byte(href)) {
 					links = append(links, href)
+				} else {
+					links = append(links, urlToScrape+href)
 				}
 			}
 		})
