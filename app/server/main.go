@@ -126,35 +126,35 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 
 	links := []string{}
 
-	if doc, e = goquery.NewDocument(urlToScrape); e != nil {
-		log.Print("error querying for document: ", urlToScrape, "err : ", e)
-		parsedResponseJSON = getFailedSlurpResponse()
-	} else {
-		crossDomainRegex, err := regexp.Compile(`^http`)
-		if err != nil {
+	if doc, e = goquery.NewDocument(urlToScrape); e == nil {
+		if crossDomainRegex, err := regexp.Compile(`^http`); err != nil {
 			log.Printf("issue compiling regular expression to validate cross domain URLs")
 		}
-
 		doc.Find("a").Each(func(i int, s *goquery.Selection) {
-			href, exists := s.Attr("href")
-			if exists != true {
-				log.Print("href does not exist for: ", s)
-			} else {
+			if href, exists := s.Attr("href"); exists == true {
 				if crossDomainRegex.Match([]byte(href)) {
 					links = append(links, href)
 				} else {
-					links = append(links, urlToScrape+href)
+					if href != "" {
+						links = append(links, urlToScrape+href)
+					} else {
+						// TODO: set error on blank link in client side code,
+						// also change over to including content of link text
+						// to show in table
+						links = append(links, '')
+					}
 				}
+			} else {
+				log.Print("href does not exist for: ", s)
 			}
 		})
-
 		parsedResponse := &ParsedResponse{true, links}
-		parsedResponseJSON, err = json.Marshal(parsedResponse)
-
-		if err != nil {
+		if parsedResponseJSON, err = json.Marshal(parsedResponse); err != nil {
 			parsedResponseJSON = getFailedSlurpResponse()
 		}
-
+	} else {
+		log.Print("error querying for document: ", urlToScrape, "err : ", e)
+		parsedResponseJSON = getFailedSlurpResponse()
 	}
 
 	w.Write(parsedResponseJSON)
