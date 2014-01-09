@@ -141,7 +141,7 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 						// TODO: set error on blank link in client side code,
 						// also change over to including content of link text
 						// to show in table
-						links = append(links, '')
+						links = append(links, "")
 					}
 				}
 			} else {
