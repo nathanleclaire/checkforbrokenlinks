@@ -89,12 +89,10 @@ Sincerely,
 
 func readConfigurationFile(filepath string) Configuration {
 	var conf Configuration
-	rawConfigurationJson, err := ioutil.ReadFile(filepath)
-	if err != nil {
+	if rawConfigurationJson, err := ioutil.ReadFile(filepath); err != nil {
 		log.Print("error reading smtp config file ", err)
 	}
-	err = json.Unmarshal(rawConfigurationJson, &conf)
-	if err != nil {
+	if err = json.Unmarshal(rawConfigurationJson, &conf); err != nil {
 		log.Print("error unmarshalling config ", err)
 	}
 	return conf
@@ -107,8 +105,7 @@ func connectToSmtpServer(emailUser EmailUser) smtp.Auth {
 
 func getFailedSlurpResponse() []byte {
 	failResponse := &ParsedResponse{false, nil}
-	failResponseJSON, err := json.Marshal(failResponse)
-	if err != nil {
+	if failResponseJSON, err := json.Marshal(failResponse); err != nil {
 		log.Print("something went really weird in attempt to marshal a fail json ", err)
 		failResponseJSON, _ = json.Marshal(nil)
 	}
@@ -161,8 +158,7 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 
 func checkHandler(w http.ResponseWriter, r *http.Request) {
 	urlToCheck := r.URL.Query().Get("urlToCheck")
-	externalServerResponse, err := http.Get(urlToCheck)
-	if err != nil {
+	if externalServerResponse, err := http.Get(urlToCheck); err != nil {
 		log.Print("error getting in checkHandler ", urlToCheck)
 	}
 
@@ -171,8 +167,7 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 		"statusCode": externalServerResponse.StatusCode,
 	}
 
-	responseJSON, err := json.Marshal(response)
-	if err != nil {
+	if responseJSON, err := json.Marshal(response); err != nil {
 		log.Print("error Marshalling check response json: ", err)
 	}
 	w.Write(responseJSON)
@@ -189,8 +184,7 @@ func emailHandlerClosure(auth smtp.Auth, recaptchaPrivateKey string, emailUser E
 		}
 		dec := json.NewDecoder(r.Body)
 		contactData := SendEmailData{}
-		err = dec.Decode(&contactData)
-		if err != nil {
+		if dec.Decode(&contactData) != nil {
 			log.Print(err)
 			response["success"] = false
 		}
@@ -209,8 +203,7 @@ func emailHandlerClosure(auth smtp.Auth, recaptchaPrivateKey string, emailUser E
 		} else {
 			response["success"] = false
 		}
-		jsonResponse, err = json.Marshal(response)
-		if err != nil {
+		if jsonResponse, err = json.Marshal(response); err != nil {
 			log.Print("marshalling r ", err)
 		}
 		w.Write(jsonResponse)
@@ -229,8 +222,7 @@ func main() {
 	http.Handle("/lib/", http.FileServer(http.Dir("..")))
 	http.Handle("/partials/", http.FileServer(http.Dir("..")))
 	http.Handle("/js/", http.FileServer(http.Dir("..")))
-	err := http.ListenAndServe(":8000", nil)
-	if err != nil {
+	if http.ListenAndServe(":8000", nil) != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
