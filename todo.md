@@ -4,3 +4,4 @@
 - Move to using separate go file (possibly totally separate package) for interacting with gmail
 - WRITE UNIT TESTS!!!!!1
 - Address that one guy on HN's feedback (re: slurpService etc.)
+- clean up server/main.go (separate into files for recaptcha, emailing, separate handlers, etc.)
