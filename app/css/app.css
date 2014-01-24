@@ -5670,3 +5670,7 @@ i.error-inline {
 .linkrow-animate.ng-move.ng-move-active {
     opacity:1;
 }
+table {
+	table-layout: fixed;
+	word-wrap: break-word;
+}
