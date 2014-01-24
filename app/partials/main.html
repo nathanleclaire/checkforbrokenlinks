@@ -34,6 +34,9 @@
                 <tr>
                     <th>#</th>
                     <th>Status</th>
+					<th>
+						Text
+					</th>
                     <th>
                         Link
                         <cancel-x clear-func="clearResults"></cancel-x>
@@ -41,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="href in retrievedUrls track by $index" class="linkrow-animate" test-url-status>
+                <tr ng-repeat="link in retrievedUrls track by $index" class="linkrow-animate" test-url-status>
                 </tr>
             </tbody>
         </table>

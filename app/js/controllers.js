@@ -43,7 +43,7 @@ angular.module('checkForBrokenLinksApp.controllers', [])
                         $scope.doneScrapingOriginalUrl = true;
                         if (data.success) {
                             var links = data.links;
-                            if (links.length > 1) {
+                            if (links.length > 0) {
                                 $scope.retrievedUrls = links;
                                 $timeout(function() {
                                     $scope.$broadcast('checkLinks');
@@ -61,7 +61,7 @@ angular.module('checkForBrokenLinksApp.controllers', [])
         var check = function() {
             $http.get('/check', {
                 params: {
-                    urlToCheck: $scope.href
+                    urlToCheck: $scope.link.href
                 }
             })
                 .success(function(data) {

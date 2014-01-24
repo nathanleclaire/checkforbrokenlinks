@@ -18,7 +18,7 @@ import (
 
 type ParsedResponse struct {
 	Success bool     `json:"success"`
-	Links   []string `json:"links"`
+	Links   []map[string]string `json:"links"`
 }
 
 type EmailUser struct {
@@ -119,29 +119,31 @@ func slurpHandler(w http.ResponseWriter, r *http.Request) {
 	var e error
 	var parsedResponseJSON []byte
 
-	links := []string{}
+	var link map[string]string
+	var href string
+	var exists bool
+	var content string
+
+	var links []map[string]string
 
 	if doc, e = goquery.NewDocument(urlToScrape); e == nil {
 		if crossDomainRegex, err := regexp.Compile(`^http`); err != nil {
 			log.Printf("issue compiling regular expression to validate cross domain URLs")
 		}
-		doc.Find("a").Each(func(i int, s *goquery.Selection) {
-			if href, exists := s.Attr("href"); exists == true {
-				if crossDomainRegex.Match([]byte(href)) {
-					links = append(links, href)
-				} else {
-					if href != "" {
-						links = append(links, urlToScrape+href)
-					} else {
-						// TODO: set error on blank link in client side code,
-						// also change over to including content of link text
-						// to show in table
-						links = append(links, "")
-					}
-				}
-			} else {
-				log.Print("href does not exist for: ", s)
+
+		doc.Find("a").Each(func(i int, selection *goquery.Selection) {
+			link = make(map[string]string)
+			if href, exists = selection.Attr("href"); !exists {
+				log.Print("href does not exist for: ", selection)
+				href = ""
 			}
+			content = selection.Contents().Text()
+			if !crossDomainRegex.Match([]byte(href)) {
+				href = urlToScrape+href // same origin link
+			}
+			link["href"] = href
+			link["content"] = content
+			links = append(links, link)
 		})
 		parsedResponse := &ParsedResponse{true, links}
 		if parsedResponseJSON, err = json.Marshal(parsedResponse); err != nil {
